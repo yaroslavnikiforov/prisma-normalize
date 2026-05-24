@@ -110,7 +110,7 @@ function transformLine(
 
   let newFieldName = fieldName
   let mapAttr = ''
-  if (fieldName.includes('_') && needsRename(fieldName)) {
+  if (isRenamableFieldName(fieldName)) {
     newFieldName = toCamel(fieldName)
     if (!isRelationField && !/@map\(/.test(rest)) {
       mapAttr = ` @map("${fieldName}")`
@@ -130,7 +130,7 @@ function transformBlockAttr(line: string): string {
     (_full, prefix: string, list: string) => {
       const items = list.split(',').map(s => s.trim())
       const newItems = items.map(f =>
-        f.includes('_') && needsRename(f) ? toCamel(f) : f,
+        isRenamableFieldName(f) ? toCamel(f) : f,
       )
       return `${prefix}([${newItems.join(', ')}]`
     },
@@ -156,7 +156,7 @@ function renameFieldList(list: string): string {
   return list
     .split(',')
     .map(s => s.trim())
-    .map(f => (f.includes('_') && needsRename(f) ? toCamel(f) : f))
+    .map(f => (isRenamableFieldName(f) ? toCamel(f) : f))
     .join(', ')
 }
 
@@ -177,6 +177,10 @@ function adjustSep(sep: string, oldLen: number, newLen: number): string {
 
 function needsRename(name: string): boolean {
   return /^[a-z][a-z0-9_]*$/.test(name)
+}
+
+function isRenamableFieldName(name: string): boolean {
+  return /^[a-z]/.test(name) && name.includes('_')
 }
 
 function toCamel(s: string): string {

@@ -1,6 +1,6 @@
 {
   "name": "prisma-normalize",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Rewrite snake_case identifiers in Prisma schema files to PascalCase/camelCase while preserving the original DB names via @map / @@map.",
   "type": "module",
   "bin": {

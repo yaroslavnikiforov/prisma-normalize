@@ -147,6 +147,29 @@ model account {
     assert.match(output, /tagIds\s+Int\[\]\s+@map\("tag_ids"\)/)
   })
 
+  it('renames mixed-case backlink relation field names (e.g. Prisma auto-generated)', () => {
+    const input = `model post {
+  id Int @id
+  created_by_id Int
+  updated_by_id Int
+  user_post_created_by_idTouser user @relation("PostCreatedBy", fields: [created_by_id], references: [id])
+  user_post_updated_by_idTouser user @relation("PostUpdatedBy", fields: [updated_by_id], references: [id])
+}
+
+model user {
+  id Int @id
+  post_post_created_by_idTouser post[] @relation("PostCreatedBy")
+  post_post_updated_by_idTouser post[] @relation("PostUpdatedBy")
+}
+`
+    const { output } = normalizeSchema(input)
+    assert.match(output, /userPostCreatedByIdTouser\s+User/)
+    assert.match(output, /userPostUpdatedByIdTouser\s+User/)
+    assert.match(output, /postPostCreatedByIdTouser\s+Post\[\]/)
+    assert.match(output, /postPostUpdatedByIdTouser\s+Post\[\]/)
+    assert.doesNotMatch(output, /userPostCreatedByIdTouser[^\n]*@map\(/)
+  })
+
   it('renames cross-file type references when given a shared typeMap', () => {
     const fileA = `model post {
   id Int @id
