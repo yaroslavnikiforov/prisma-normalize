@@ -1,0 +1,58 @@
+{
+  "name": "prisma-normalize",
+  "version": "0.1.0",
+  "description": "Rewrite snake_case identifiers in Prisma schema files to PascalCase/camelCase while preserving the original DB names via @map / @@map.",
+  "type": "module",
+  "bin": {
+    "prisma-normalize": "dist/cli.js"
+  },
+  "main": "./dist/normalize.js",
+  "types": "./dist/normalize.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/normalize.d.ts",
+      "import": "./dist/normalize.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "keywords": [
+    "prisma",
+    "schema",
+    "snake-case",
+    "camel-case",
+    "normalize",
+    "map"
+  ],
+  "scripts": {
+    "build": "tsc && chmod +x dist/cli.js",
+    "test": "node --import tsx --test tests/*.test.ts",
+    "clean": "rm -rf dist",
+    "prepublishOnly": "npm run clean && npm run build && npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yaroslavnikiforov/prisma-normalize.git"
+  },
+  "author": "yaroslavnikiforov <yaroslav.nikiforov.93@gmail.com> (https://github.com/yaroslavnikiforov)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/yaroslavnikiforov/prisma-normalize/issues"
+  },
+  "homepage": "https://github.com/yaroslavnikiforov/prisma-normalize#readme",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
+  },
+  "devDependencies": {
+    "@types/node": "^20.19.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.6.3"
+  }
+}
